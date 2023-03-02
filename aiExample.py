@@ -36,17 +36,24 @@ class AddQueryThread(Thread):
 
     def run(self):
         print(f'query: {self._query}')
-        url = api + self._query
+        if self._type == 'url':
+            url = api_img + self._query
+        else:
+            url = api + self._query
+            
         r = requests.get(url, headers=HEADERS)
         data = r.json()
-        text = data['text']
+        if self._type == 'url':
+            text = data['img']
+        else:
+            text = data['text']
         self._openAI.AIarticle({self._type:text})
 
 def main():
     # keyword陣列
     select_list = [can_up,how_do_good,sell,can_up+how_do_good+sell+Psychology, feeling+mba]
     category = ['個人學習提升','企業品牌','企業行銷','實際應用','心理學','心理學']
-
+    category_img = ['Personal Learning Improvement','Corporate Brand','Corporate Marketing','Practical Application','spiritual mind','mind control']
     # 亂數 選擇哪一個分類  3為單純企業實際應用  4為心理學  5為心理學談論
     number = randint(0, 4)
     if number > 3:
@@ -68,11 +75,10 @@ def main():
     openAI = OpenAI()
     threads = []
     # 圖片
-    # query = f'給我1張近期有關於{industry}、{keyword}的 有效圖片url'
-    # query = f'從Unsplash or Pexels or Pixabay or www.51miz.com 給我1張近期有關於{industry}、{keyword}的 有效圖片url'
-    # t = AddQueryThread(openAI, query, 'url')
-    # threads.append(t)
-    # t.start()
+    query = f'There are pictures about the {category_img[number]}, science fiction style, and the background should be in the style of science and technology'
+    t = AddQueryThread(openAI, query, 'url')
+    threads.append(t)
+    t.start()
     
     # 文章1
     if number > 3:
@@ -143,17 +149,17 @@ def main():
     content_url = openAI.article.get("url", "更多資訊等待您的探索")
     content_text1 = openAI.article.get("text1", "更多資訊等待您的探索")
     content_text2 = openAI.article.get("text2", "更多資訊等待您的探索")
-    # img = f'<img src="{content_url}" alt="{title}">'
-    # print('img')
-    # print(img)
+    img = f'<img src="{content_url}" alt="{title}">'
+    print('img')
+    print(img)
     print('--'*30)
     print('content_text1')
     print(content_text1)
     print('--'*30)
     print('content_text2')
     print(content_text2)
-    # article_content = img + '\n\n' + content_text1 + '\n\n' + content_text2
-    article_content =  '\n\n' + content_text1 + '\n\n' + content_text2
+    article_content = img + '\n\n' + content_text1 + '\n\n' + content_text2
+    # article_content =  '\n\n' + content_text1 + '\n\n' + content_text2
     article_info = {
         'title': title,
         'category': category[number],
