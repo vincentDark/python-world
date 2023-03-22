@@ -53,7 +53,7 @@ def main():
     # keyword陣列
     select_list = [can_up,how_do_good,sell,can_up+how_do_good+sell+Psychology, feeling+mba]
     category = ['個人學習提升','企業品牌','企業行銷','實際應用','心理學','心理學']
-    category_img = ['Personal Learning Improvement','Corporate Brand','Corporate Marketing','Practical Application','spiritual mind','mind control']
+    # category_img = ['Personal Learning','Corporate Brand','Corporate Marketing','Practical Application','spiritual mind','mind control']
     # 亂數 選擇哪一個分類  3為單純企業實際應用  4為心理學  5為心理學談論
     number = randint(0, 4)
     if number > 3:
@@ -75,7 +75,9 @@ def main():
     openAI = OpenAI()
     threads = []
     # 圖片
-    query = f'There are pictures about the {category_img[number]}, science fiction style, and the background should be in the style of science and technology'
+    # query = f'There are pictures about the {category_img[number]}, science fiction style, and the background should be in the style of science and technology'
+    query = industry
+
     t = AddQueryThread(openAI, query, 'url')
     threads.append(t)
     t.start()

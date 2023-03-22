@@ -10,7 +10,8 @@ def wp_post(wp_info, article_info):
     wp = Client(wp_url, wp_id,wp_pw)
     #建立新文章
     post = WordPressPost()
-    post.post_status = "publish"
+    # post.post_status = "publish"
+    post.post_status = "draft"
     post.title = article_info['title']
     post.content = article_info['article']
     tag = article_info['tag']
